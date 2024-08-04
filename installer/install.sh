@@ -1,11 +1,13 @@
 #!/bin/bash
 cat << "EOF"
-    _               ___  ___   ___   __  
-   /_\  _ _ ___ ___/ _ \/ __| |_  ) /  \ 
-  / _ \| '_/ _ \_ / (_) \__ \  / / | () |
- /_/ \_\_| \___/__|\___/|___/ /___(_)__/ 
-                                         
-	----- ArozOS 2.0 Installer -----	
+
+                    ____        _ _      _              ___  ____  
+ |  _ \ _   _(_) |_ __| | ___ _ __   / _ \/ ___| 
+ | | | | | | | | __/ _` |/ _ \ '__| | | | \___ \ 
+ | |_| | |_| | | || (_| |  __/ |    | |_| |___) |
+ |____/ \__,_|_|\__\__,_|\___|_|     \___/|____/ 
+                                                                        
+	----- DuitderOS 1.0 BETA Installer -----	
 	
 EOF
 
@@ -15,7 +17,7 @@ echo ""
 read -p "Do you agree to the terms of the GPLv3 license? (y/n) " agree
 
 if [[ $agree != "y" ]]; then
-  echo "You must agree to the GPLv3 license to use ArozOS."
+  echo "You must agree to the GPLv3 license to use DuitderOS."
   exit 1
 fi
 
@@ -31,8 +33,8 @@ fi
 
 # Create the required folder structure to hold the installation
 cd ~/ || exit
-mkdir arozos
-cd arozos || exit
+mkdir duitderos
+cd duitderos || exit
 
 # Run apt-updates
 ${sudo}apt-get update
@@ -64,10 +66,10 @@ else
   download_url="https://github.com/tobychui/arozos/releases/latest/download/arozos_${arch}"
 fi
 
-# Download the arozos binary
-echo "Downloading Arozos from ${download_url} ..."
-wget -O arozos "${download_url}"
-chmod +x arozos
+# Download the duitder binary
+echo "Downloading Duitder from ${download_url} ..."
+wget -O duitder "${download_url}"
+chmod +x duitder
 
 # Download the webpack
 wget -O web.tar.gz "https://github.com/tobychui/arozos/releases/latest/download/web.tar.gz"
@@ -75,11 +77,11 @@ wget -O web.tar.gz "https://github.com/tobychui/arozos/releases/latest/download/
 # Check if the platform is supported for the launcher
 if [[ "$arch" == "amd64" || "$arch" == "arm" || "$arch" == "arm64" ]]; then
   # Ask if the user wants to install the launcher
-  read -p "Do you want to install the Arozos launcher for OTA updates? [Y/n] " answer
+  read -p "Do you want to install the Duitder launcher for OTA updates? [Y/n] " answer
   case ${answer:0:1} in
       y|Y )
           # Download the appropriate binary
-          echo "Downloading Arozos launcher from https://github.com/aroz-online/launcher/releases/latest/ ..."
+          echo "Downloading Duitder launcher from https://github.com/aroz-online/launcher/releases/latest/ ..."
           case "$arch" in
               amd64)
                   launcher_url="https://github.com/aroz-online/launcher/releases/latest/download/launcher_linux_amd64"
@@ -97,18 +99,18 @@ if [[ "$arch" == "amd64" || "$arch" == "arm" || "$arch" == "arm64" ]]; then
           if [[ -n "$launcher_url" ]]; then
               wget -O launcher "${launcher_url}"
               chmod +x launcher
-              echo "Arozos launcher has been installed successfully!"
+              echo "Duitder launcher has been installed successfully!"
           fi
           ;;
       * )
-          echo "Arozos launcher installation skipped"
+          echo "Duitder launcher installation skipped"
           ;;
   esac
 fi
 
 # Ask for setup name
-read -p "Enter setup name (default: aroz): " arozosname
-arozosname=${arozosname:-aroz}
+read -p "Enter setup name (default: duitder): " arozosname
+arozosname=${arozosname:-duitder}
 
 # Ask for preferred listening port
 read -p "Enter preferred listening port (default: 8080): " arozport
@@ -167,12 +169,12 @@ EOF
         ${sudo}systemctl daemon-reload
         ${sudo}systemctl enable arozos.service
 		${sudo}systemctl start arozos.service
-        echo "ArozOS installation completed!"
+        echo "duitder installation completed!"
 		ip_address=$(hostname -I | awk '{print $1}')
 		echo "Please continue the system setup at http://$ip_address:$arozport/"
     fi
 else
-	echo "ArozOS installation completed! Execute start.sh to startup your ArozOS system."
+	echo "Duitder installation completed! Execute start.sh to startup your Duitder system."
 fi
 
 
